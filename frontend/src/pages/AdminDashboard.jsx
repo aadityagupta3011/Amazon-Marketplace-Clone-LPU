@@ -1,67 +1,27 @@
-import { FiCheckCircle, FiPackage, FiUsers, FiUserPlus } from 'react-icons/fi';
-import DashboardSidebar from '../components/DashboardSidebar';
+import { FiPackage, FiUserCheck, FiUserPlus, FiUsers } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
+import PageHeader from '../components/dashboard/PageHeader';
+import StatCard from '../components/dashboard/StatCard';
+import StatusPill from '../components/dashboard/StatusPill';
+import { adminSummary, pendingSellers } from '../data/dashboardData';
 
-const metrics = [
-  { key: 'users', label: 'Registered users', icon: FiUsers },
-  { key: 'sellers', label: 'Approved sellers', icon: FiCheckCircle },
-  { key: 'pendingSellers', label: 'Seller approvals', icon: FiUserPlus },
-  { key: 'products', label: 'Listed products', icon: FiPackage },
-];
+function AdminDashboard() {
+  const cards = [
+    { icon: FiUsers, label: 'Registered users', value: adminSummary.users.toLocaleString('en-IN'), helper: 'Across all roles', tone: 'sky' },
+    { icon: FiUserCheck, label: 'Approved sellers', value: adminSummary.sellers, helper: '4 approved this month', tone: 'emerald' },
+    { icon: FiUserPlus, label: 'Seller approvals', value: adminSummary.pendingSellers, helper: 'Need review', tone: 'amber' },
+    { icon: FiPackage, label: 'Listed products', value: adminSummary.products, helper: '18 added this week', tone: 'violet' },
+  ];
 
-function AdminDashboard({ dashboardData = {}, pendingSellers = [] }) {
   return (
-    <div className="min-h-screen bg-slate-100 md:flex">
-      <DashboardSidebar role="admin" />
-
-      <main className="flex-1 p-4 sm:p-6 lg:p-8">
-        <div className="mb-7">
-          <p className="text-sm font-medium text-slate-500">Administration</p>
-          <h1 className="text-2xl font-bold text-slate-900">Marketplace overview</h1>
-        </div>
-
-        <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          {metrics.map(({ key, label, icon: Icon }) => (
-            <article key={key} className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-              <span className="inline-flex rounded-lg bg-sky-100 p-2.5 text-sky-700">
-                <Icon className="text-xl" />
-              </span>
-              <p className="mt-4 text-sm font-medium text-slate-500">{label}</p>
-              <p className="mt-1 text-2xl font-bold text-slate-900">
-                {Number(dashboardData[key] || 0).toLocaleString('en-IN')}
-              </p>
-            </article>
-          ))}
-        </section>
-
-        <section className="mt-7 rounded-xl border border-slate-200 bg-white shadow-sm">
-          <div className="border-b border-slate-200 px-5 py-4">
-            <h2 className="font-bold text-slate-900">Pending seller approvals</h2>
-            <p className="text-sm text-slate-500">Review seller requests before they can list products.</p>
-          </div>
-
-          {pendingSellers.length ? (
-            <div className="divide-y divide-slate-100">
-              {pendingSellers.map((seller) => (
-                <div key={seller._id || seller.id} className="flex flex-col gap-3 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
-                  <div>
-                    <p className="font-semibold text-slate-900">{seller.storeName}</p>
-                    <p className="text-sm text-slate-500">{seller.ownerName} · {seller.email}</p>
-                  </div>
-                  <a
-                    href={`/admin/sellers/${seller._id || seller.id}`}
-                    className="focus-ring w-fit rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
-                  >
-                    Review request
-                  </a>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <p className="px-5 py-10 text-center text-sm text-slate-500">There are no seller approvals waiting.</p>
-          )}
-        </section>
-      </main>
-    </div>
+    <>
+      <PageHeader eyebrow="Admin dashboard" title="Marketplace control center" description="Manage seller onboarding, catalog quality and marketplace activity." />
+      <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">{cards.map((card) => <StatCard key={card.label} {...card} />)}</section>
+      <section className="mt-7 rounded-2xl border border-slate-200 bg-white shadow-card">
+        <div className="flex items-center justify-between border-b border-slate-200 px-5 py-5 sm:px-6"><div><h2 className="font-bold text-slate-900">Pending seller approvals</h2><p className="mt-1 text-sm text-slate-500">Review requests before sellers can publish products.</p></div><Link to="/admin/sellers" className="text-sm font-bold text-amazon-blue hover:underline">Manage sellers</Link></div>
+        <div className="divide-y divide-slate-100">{pendingSellers.map((seller) => <div key={seller.id} className="flex flex-col gap-3 px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6"><div><p className="font-bold text-slate-800">{seller.storeName}</p><p className="mt-1 text-sm text-slate-500">{seller.owner} · {seller.category}</p></div><StatusPill status="Pending" /></div>)}</div>
+      </section>
+    </>
   );
 }
 
