@@ -64,20 +64,20 @@ function Navbar() {
           </form>
 
           <div className="hidden items-center gap-4 text-xs md:flex">
-            <button type="button" className="focus-ring rounded px-1 text-left hover:text-amazon-orange">
+            <Link to="/login" className="focus-ring rounded px-1 text-left hover:text-amazon-orange">
               <span className="text-slate-300">Hello, sign in</span><br />
               <strong className="text-sm">Account & Lists</strong>
-            </button>
-            <button type="button" className="focus-ring rounded px-1 text-left hover:text-amazon-orange">
+            </Link>
+            <Link to="/returns" className="focus-ring rounded px-1 text-left hover:text-amazon-orange">
               <span className="text-slate-300">Returns</span><br />
               <strong className="text-sm">& Orders</strong>
-            </button>
+            </Link>
           </div>
 
-          <button type="button" className="focus-ring flex shrink-0 items-center gap-1 rounded px-1 py-1 text-sm font-bold hover:text-amazon-orange" aria-label="View shopping cart">
+          <Link to="/cart" className="focus-ring flex shrink-0 items-center gap-1 rounded px-1 py-1 text-sm font-bold hover:text-amazon-orange" aria-label="View shopping cart">
             <FaCartShopping className="text-xl" />
             <span className="hidden sm:inline">Cart</span>
-          </button>
+          </Link>
         </div>
       </div>
 
@@ -93,6 +93,7 @@ function Navbar() {
               {category.name}
             </Link>
           ))}
+          <Link to="/checkout" className="focus-ring rounded font-semibold hover:text-amazon-orange">Payment</Link>
           <span className="ml-auto font-semibold text-amazon-orange">Great Indian Deals</span>
         </div>
       </nav>
@@ -111,6 +112,10 @@ function Navbar() {
                 {category.name}
               </Link>
             ))}
+            <Link to="/checkout" onClick={() => setMenuOpen(false)} className="rounded px-3 py-2 hover:bg-slate-100">Payment</Link>
+            <Link to="/cart" onClick={() => setMenuOpen(false)} className="rounded px-3 py-2 hover:bg-slate-100">Cart</Link>
+            <Link to="/orders" onClick={() => setMenuOpen(false)} className="rounded px-3 py-2 hover:bg-slate-100">Orders</Link>
+            <Link to="/returns" onClick={() => setMenuOpen(false)} className="rounded px-3 py-2 hover:bg-slate-100">Returns</Link>
           </div>
         </div>
       )}

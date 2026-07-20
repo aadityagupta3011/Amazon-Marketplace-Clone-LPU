@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom';
 
 function Footer() {
   const footerLinks = [
-    { title: 'Get to Know Us', links: ['About ShopKart', 'Careers', 'Press Releases'] },
-    { title: 'Make Money with Us', links: ['Sell products', 'Become an affiliate', 'Advertise your products'] },
-    { title: 'Let Us Help You', links: ['Your Account', 'Shipping Rates', 'Returns Centre'] },
+    { title: 'Get to Know Us', links: [{ label: 'About ShopKart', to: '/' }, { label: 'Careers', to: '/' }, { label: 'Press Releases', to: '/' }] },
+    { title: 'Make Money with Us', links: [{ label: 'Sell products', to: '/' }, { label: 'Become an affiliate', to: '/' }, { label: 'Advertise your products', to: '/' }] },
+    { title: 'Let Us Help You', links: [{ label: 'Your Account', to: '/login' }, { label: 'Shipping Rates', to: '/' }, { label: 'Returns Centre', to: '/returns' }] },
   ];
 
   return (
@@ -16,7 +16,11 @@ function Footer() {
           <div key={column.title}>
             <h3 className="mb-4 font-bold text-white">{column.title}</h3>
             <ul className="space-y-2 text-sm text-slate-300">
-              {column.links.map((link) => <li key={link}><a href="#footer" className="hover:text-white hover:underline">{link}</a></li>)}
+              {column.links.map((link) => (
+                <li key={link.label}>
+                  <Link to={link.to} className="hover:text-white hover:underline">{link.label}</Link>
+                </li>
+              ))}
             </ul>
           </div>
         ))}
